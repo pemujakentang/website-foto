@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\Console\Input\Input;
+use thiagoalessio\TesseractOCR\TesseractOCR;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/aplod', function(){
+    return view('testaplod');
+});
+
+Route::post('store', function(){
+    $foto = request()->foto;
+    $filename = $foto->getPathName();
+    // dd($filename);
+
+
+
+    echo (new TesseractOCR($filename))->run();
+    return view('testaplod');
+})->name('upload');
