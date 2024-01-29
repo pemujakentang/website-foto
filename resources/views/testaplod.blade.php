@@ -18,5 +18,9 @@
 
     </form>
 
+   @isset($image)
+       <img src="{{ url($image) }}" alt="not found">
+   @endisset
+
 </body>
 </html>
