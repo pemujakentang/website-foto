@@ -38,18 +38,19 @@ class PhotoController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request);
 
         ini_set('memory_limit', '256M');
         try {
             // dd($request);
-            $images = $request->file('images');
+            // $images = $request->file('images');
             $texts = $request->input('text');
 
             // dd($images);
 
             $date = date('d-m-Y');
 
-            foreach ($images as $image) {
+            foreach ($request->file('images') as $image) {
                 $file = $image->getClientOriginalName();
                 $filename = pathinfo($file, PATHINFO_FILENAME);
                 $manager = new ImageManager(new Driver());
@@ -58,13 +59,16 @@ class PhotoController extends Controller
                 $converted = $read->toWebp();
 
                 $path = 'uploads'.$date.'/' . $filename . '.webp';
-                $saved = Storage::disk('public')->put($path, $converted->__toString());
+                Storage::disk('public')->put($path, $converted->__toString());
+                $foto['image'] = $path;
+                $foto['name'] = $filename . '.webp';
+                Photo::create($foto);
 
-                dd([
-                    'name' => $filename,
-                    'image' => $path,
-                    'text' => $exif
-                ]);
+                // dd([
+                //     'name' => $filename,
+                //     'image' => $path,
+                //     'text' => $exif
+                // ]);
 
                 // $path = Storage::disk('public')->put('uploads'.$date.'/'.$filename, $converted);
             }
@@ -77,7 +81,7 @@ class PhotoController extends Controller
             Log::error('Error processing request: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Internal Server Error'], 500);
         }
-        // dd($request);
+        dd($request);
     }
 
     /**
