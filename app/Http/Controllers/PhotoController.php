@@ -50,10 +50,11 @@ class PhotoController extends Controller
             $date = date('d-m-Y');
 
             foreach ($images as $image) {
-                $filename = $image->getClientOriginalName();
+                $file = $image->getClientOriginalName();
+                $filename = pathinfo($file, PATHINFO_FILENAME);
                 $manager = new ImageManager(new Driver());
                 $read = $manager->read($image);
-                $exif = $read->exif();
+                $exif = $read->exif('IFD0');
                 $converted = $read->toWebp();
 
                 $path = 'uploads'.$date.'/' . $filename . '.webp';
@@ -61,7 +62,7 @@ class PhotoController extends Controller
 
                 dd([
                     'name' => $filename,
-                    'image' => $saved,
+                    'image' => $path,
                     'text' => $exif
                 ]);
 
