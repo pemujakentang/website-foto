@@ -11,6 +11,7 @@
     {{-- <script src="../../../node_modules/tesseract.js/dist/tesseract.min.js"></script>
     <script src="../../js/tesseract.js/dist/tesseract.min.js"></script> --}}
     <script src="{{ asset('js/tesseract.js/dist/tesseract.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/exif-js/exif.js') }}"></script>
     <!-- v5 -->
     {{-- <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script> --}}
     <title>Photo</title>
@@ -41,7 +42,7 @@
             await worker.setParameters({
                 tessedit_char_whitelist: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ',
                 tessedit_pageseg_mode: 12
-                
+
             });
             const files = evt.target.files;
             const data = [];
@@ -81,6 +82,13 @@
                 textDisplay.textContent = ret.data.text;
                 imagesPreview.appendChild(textDisplay);
 
+                EXIF.getData(files[i], function() {
+                    var allMetaData = EXIF.getAllTags(this);
+                    var allMetaDataSpan = document.createElement('p');
+                    allMetaDataSpan.innerHTML = JSON.stringify(allMetaData, null, "\t");
+                    imagesPreview.appendChild(allMetaDataSpan);
+                });
+
                 // Read the file and set the img src
                 const oFReader = new FileReader();
                 oFReader.readAsDataURL(files[i]);
@@ -100,12 +108,12 @@
             // Append the CSRF token to the FormData
             formData.append('_token', csrfToken);
             fetch('/photos/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
         }
         const elm = document.getElementById('image_input');
         elm.addEventListener('change', recognize);
