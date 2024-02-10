@@ -33,11 +33,15 @@ Route::post('store', function(){
 
     $manager = new ImageManager(new Driver());
     $image = $manager->read($foto);
+    $exif = $image->exif();
+    // dd($exif);
     // $image = $image->encode(new WebpEncoder(quality: 65));
     $image = $image->toWebp()->save(base_path('public/Img/test.webp'));
     // dd($image);
     // $image = $image-->>greyscale()->save(base_path('public/Img/' . $filename));
     $url = 'Img/test.webp';
+
+
 
     //Penamaan masih hardcode blm otomatis
 
