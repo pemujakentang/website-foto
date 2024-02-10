@@ -6,6 +6,7 @@ use thiagoalessio\TesseractOCR\TesseractOCR;
 use Intervention\image\Laravel\Facades\Image;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\WebpEncoder;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,11 +33,16 @@ Route::post('store', function(){
 
     $manager = new ImageManager(new Driver());
     $image = $manager->read($foto);
-    $image = $image->greyscale()->save(base_path('public/Img/' . $filename));
-    $url = 'Img/'. $filename;
+    // $image = $image->encode(new WebpEncoder(quality: 65));
+    $image = $image->toWebp()->save(base_path('public/Img/test.webp'));
+    // dd($image);
+    // $image = $image-->>greyscale()->save(base_path('public/Img/' . $filename));
+    $url = 'Img/test.webp';
+
+    //Penamaan masih hardcode blm otomatis
 
 
 
-    echo (new TesseractOCR($url))->run();
+    // echo (new TesseractOCR($url))->run();
     return view('testaplod', ['image' => $url]);
 })->name('upload');
