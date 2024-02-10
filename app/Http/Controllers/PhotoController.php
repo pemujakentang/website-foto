@@ -8,6 +8,10 @@ use App\Http\Requests\UpdatePhotoRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Encoders\WebpEncoder;
+use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
@@ -34,10 +38,35 @@ class PhotoController extends Controller
     public function store(Request $request)
     {
         //
+
+        ini_set('memory_limit', '256M');
         try {
             // dd($request);
             $images = $request->file('images');
             $texts = $request->input('text');
+
+            // dd($images);
+
+            $date = date('d-m-Y');
+
+            foreach ($images as $image) {
+                $filename = $image->getClientOriginalName();
+                $manager = new ImageManager(new Driver());
+                $read = $manager->read($image);
+                $exif = $read->exif();
+                $converted = $read->toWebp();
+
+                $path = 'uploads'.$date.'/' . $filename . '.webp';
+                $saved = Storage::disk('public')->put($path, $converted->__toString());
+
+                dd([
+                    'name' => $filename,
+                    'image' => $saved,
+                    'text' => $exif
+                ]);
+
+                // $path = Storage::disk('public')->put('uploads'.$date.'/'.$filename, $converted);
+            }
 
             // Process $images and $texts as needed
             // Save them to your database

@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->text('image');
-            $table->text('ocr')->nullable();
+            $table->text('text')->nullable();
             $table->timestamps();
         });
     }

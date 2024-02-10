@@ -24,12 +24,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-<<<<<<< HEAD
 Route::controller(PhotoController::class)->group(function(){
     Route::get('/photos', 'index');
     Route::post('/photos/upload', 'store');
 });
-=======
 Route::get('/aplod', function(){
     return view('testaplod');
 });
@@ -48,13 +46,8 @@ Route::post('store', function(){
     // $image = $image-->>greyscale()->save(base_path('public/Img/' . $filename));
     $url = 'Img/test.webp';
 
-
-
     //Penamaan masih hardcode blm otomatis
-
-
-
     // echo (new TesseractOCR($url))->run();
     return view('testaplod', ['image' => $url]);
+
 })->name('upload');
->>>>>>> hapis

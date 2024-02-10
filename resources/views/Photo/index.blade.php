@@ -53,8 +53,8 @@
             const start = document.getElementById("start");
 
             for (let i = 0; i < files.length; i++) {
-                const ret = await worker.recognize(files[i]);
-                const text = ret.data.text;
+                // const ret = await worker.recognize(files[i]);
+                // const text = ret.data.text;
 
                 // // Push each image and its extracted text to the data array
                 // data.push({
@@ -64,7 +64,7 @@
 
                 // Append each image and its extracted text to the FormData
                 formData.append('images[]', files[i]);
-                formData.append('text[]', text);
+                // formData.append('text[]', text);
 
                 // Create a new img element for each image
                 const imgPreview = document.createElement('img');
@@ -78,16 +78,16 @@
                 // console.log(ret.data.text);
 
                 // Display the recognized text below each image
-                const textDisplay = document.createElement('p');
-                textDisplay.textContent = ret.data.text;
-                imagesPreview.appendChild(textDisplay);
+                // const textDisplay = document.createElement('p');
+                // textDisplay.textContent = ret.data.text;
+                // imagesPreview.appendChild(textDisplay);
 
-                EXIF.getData(files[i], function() {
-                    var allMetaData = EXIF.getAllTags(this);
-                    var allMetaDataSpan = document.createElement('p');
-                    allMetaDataSpan.innerHTML = JSON.stringify(allMetaData, null, "\t");
-                    imagesPreview.appendChild(allMetaDataSpan);
-                });
+                // EXIF.getData(files[i], function() {
+                //     var allMetaData = EXIF.getAllTags(this);
+                //     var allMetaDataSpan = document.createElement('p');
+                //     allMetaDataSpan.innerHTML = JSON.stringify(allMetaData, null, "\t");
+                //     imagesPreview.appendChild(allMetaDataSpan);
+                // });
 
                 // Read the file and set the img src
                 const oFReader = new FileReader();
